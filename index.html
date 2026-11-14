@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Cafeteria Order Management System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!--HEADER-->
+  <header>
+    <div class="header-inner">
+      <div>
+        <h1>Cafeteria Order Management</h1>
+      </div>
+      <button id="btn-reset" class="header-btn" title="Clear all orders (for testing)">Reset</button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!--LEFT COLUMN: Customer Menu-->
+    <div class="col-left">
+      <section class="card card-menu">
+        <h2>Customer Menu</h2>
+
+        <div class="name-row">
+          <label for="customer-name">Customer name</label>
+          <input type="text" id="customer-name" class="text-input" maxlength="20" placeholder="e.g. Asha" autocomplete="off" />
+        </div>
+
+        <table class="menu-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Price / unit</th>
+              <th>Qty</th>
+            </tr>
+          </thead>
+          <tbody id="menu-body">
+            <!-- Filled by app.js from the MENU constant -->
+          </tbody>
+        </table>
+        <button id="btn-place" class="btn btn-primary">Place Order</button>
+        <p id="place-msg" class="place-msg"></p>
+      </section>
+    </div>
+
+    <!--RIGHT COLUMN: Summary, queues, completed, customers, log-->
+    <div class="col-right">
+
+      <!-- Summary Counters + Action Buttons -->
+      <section class="card card-summary">
+        <div class="pipeline">
+          <div class="stage stage-pending">
+            <span class="stage-label">Pending</span>
+            <span class="stage-count" id="count-pending">0</span>
+          </div>
+          <div class="stage stage-cooking">
+            <span class="stage-label">Cooking</span>
+            <span class="stage-count" id="count-cooking">0</span>
+          </div>
+          <div class="stage stage-ready">
+            <span class="stage-label">Ready</span>
+            <span class="stage-count" id="count-ready">0</span>
+          </div>
+          <div class="stage stage-done">
+            <span class="stage-label">Completed</span>
+            <span class="stage-count" id="count-done">0</span>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="btn-cook" class="btn btn-cook">Start Cooking Next</button>
+          <button id="btn-ready" class="btn btn-ready">Mark Ready</button>
+          <button id="btn-complete" class="btn btn-complete">Mark Completed</button>
+        </div>
+      </section>
+
+      <!-- Queue visualization: Pending + Cooking + Ready -->
+      <div class="row row-queue">
+
+        <section class="card card-pending">
+          <h2>Pending Queue <span class="badge badge-fifo">FIFO</span></h2>
+          <div class="queue-labels">
+            <span class="label-front">&larr; FRONT (next to cook)</span>
+            <span class="label-rear">REAR (just added) &rarr;</span>
+          </div>
+          <div id="pending-list" class="queue-list">
+            <p class="empty-msg">Queue is empty</p>
+          </div>
+        </section>
+
+        <section class="card card-cooking">
+          <h2>Currently Cooking</h2>
+          <div id="cooking-slot" class="cooking-slot">
+            <p class="empty-msg">Nothing cooking</p>
+          </div>
+        </section>
+
+        <section class="card card-ready">
+          <h2>Ready for Pickup</h2>
+          <div id="ready-list" class="order-list">
+            <p class="empty-msg">No orders ready</p>
+          </div>
+        </section>
+
+      </div><!-- end row-queue -->
+
+      <!-- Completed Orders + Customer-wise Orders + Activity Log -->
+      <div class="row row-bottom">
+
+        <section class="card card-completed">
+          <h2>Completed Orders</h2>
+          <div id="completed-list" class="order-list">
+            <p class="empty-msg">No completed orders yet</p>
+          </div>
+        </section>
+
+        <section class="card card-customers">
+          <h2>Customer-wise Orders</h2>
+          <div id="customers-list" class="customer-list">
+            <p class="empty-msg">No customers yet</p>
+          </div>
+        </section>
+
+        <section class="card card-log">
+          <h2>Order Activity</h2>
+          <!-- Filled by app.js (init adds the first line) -->
+          <ul id="activity-log" class="activity-log"></ul>
+        </section>
+
+      </div><!-- end row-bottom -->
+
+    </div><!-- end col-right -->
+
+  </main>
+  <script src="app.js"></script>
+</body>
+
+</html>

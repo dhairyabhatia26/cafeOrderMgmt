@@ -1,0 +1,364 @@
+/* ==========================================================
+   style.css - Cafeteria Order Management System
+   ========================================================== */
+
+:root {
+  --bgColor : #ffffff;                    /* colour 1: background           */
+  --textlines : #0c0b09;                    /* colour 2: text and lines       */
+  --accent   : #544544;                    /* colour 3: the only accent      */
+
+  /* Faded cream, for secondary text, borders and hover */
+  --textlines-dim   : rgba(1, 1, 1, 0.68);   /* secondary text */
+  --textlines-line  : rgba(3, 3, 3, 0.3);   /* borders        */
+  --textlines-faint : rgba(0, 0, 0, 0.12);   /* hover fill     */
+
+  --radius : 3px;                       /* one corner size for everything */
+  --font   : "Aptos Display", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ---------- Reset ----------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; background: var(--bgColor); color: var(--textlines); color-scheme: dark; }
+body {
+  font-family : var(--font);
+  background  : var(--bgColor);
+  color       : var(--textlines);
+  min-height  : 100vh;
+  line-height : 1.4;
+}
+
+h1, h2 { font-weight: 600; }
+
+:focus-visible { outline: 2px solid var(--textlines); outline-offset: 2px; }
+
+/* Thin scrollbars inside the lists */
+.queue-list, .order-list, .customer-list, .activity-log {
+  scrollbar-width : thin;
+  scrollbar-color : var(--textlines-line) transparent;
+}
+
+/* ---------- Header ---------------------------------------- */
+header {
+  border-bottom : 1px solid var(--textlines-line);
+  padding       : 10px 20px;
+}
+.header-inner {
+  display         : flex;
+  align-items     : center;
+  justify-content : space-between;
+  max-width       : 1400px;
+  margin          : 0 auto;
+}
+header h1 { font-size: 1.3rem; }
+
+.header-btn {
+  font-family   : inherit;
+  font-size     : .88rem;
+  background    : transparent;
+  color         : var(--textlines);
+  border        : 1px solid var(--textlines-line);
+  border-radius : var(--radius);
+  padding       : 5px 14px;
+  cursor        : pointer;
+}
+.header-btn:hover { background: var(--textlines-faint); }
+
+/* ---------- Page layout ----------------------------------- */
+.layout {
+  max-width             : 1400px;
+  margin                : 12px auto;
+  padding               : 0 16px;
+  display               : grid;
+  grid-template-columns : 290px 1fr;    /* narrow menu, wide dashboard */
+  gap                   : 12px;
+  align-items           : start;
+}
+.col-right {
+  display        : flex;
+  flex-direction : column;
+  gap            : 12px;
+  min-width      : 0;
+}
+.row { display: grid; gap: 12px; }
+.row-queue  { grid-template-columns: 2fr 1fr 1fr; }
+.row-bottom { grid-template-columns: 1fr 1.3fr 1.2fr; }
+
+/* ---------- Boxes ----------------------------------------- */
+.card {
+  border        : 1px solid var(--textlines-line);
+  border-radius : var(--radius);
+  padding       : 10px 14px 12px;
+  min-width     : 0;
+}
+.card h2 {
+  display       : flex;
+  align-items   : center;
+  gap           : 8px;
+  font-size     : 1rem;
+  margin-bottom : 8px;
+  padding-bottom: 6px;
+  border-bottom : 1px solid var(--textlines-line);
+}
+
+/* ---------- Customer name + menu table -------------------- */
+.name-row {
+  display        : flex;
+  flex-direction : column;
+  gap            : 4px;
+  margin-bottom  : 10px;
+  font-size      : .86rem;
+  color          : var(--textlines-dim);
+}
+.text-input, .qty-input {
+  font-family   : inherit;
+  font-size     : .92rem;
+  background    : var(--bgColor);
+  color         : var(--textlines);
+  border        : 1px solid var(--textlines-line);
+  border-radius : var(--radius);
+}
+.text-input { width: 100%; padding: 6px 8px; }
+.qty-input  { width: 52px; padding: 3px 5px; text-align: center; }
+.text-input::placeholder { color: var(--textlines-dim); opacity: 1; }
+.text-input:focus, .qty-input:focus { border-color: var(--textlines); }
+
+.menu-table {
+  width           : 100%;
+  border-collapse : collapse;
+  font-size       : .9rem;
+  margin-bottom   : 10px;
+}
+.menu-table th {
+  padding       : 4px 6px;
+  text-align    : left;
+  font-weight   : 500;
+  font-size     : .82rem;
+  color         : var(--textlines-dim);
+  border-bottom : 1px solid var(--textlines-line);
+}
+.menu-table td {
+  padding       : 4px 6px;
+  border-bottom : 1px solid var(--textlines-faint);
+}
+
+.place-msg {
+  min-height : 1.3em;
+  margin-top : 6px;
+  font-size  : .86rem;
+  color      : var(--accent);
+}
+
+/* ---------- Buttons --------------------------------------- */
+.btn {
+  font-family   : inherit;
+  font-size     : .9rem;
+  font-weight   : 600;
+  padding       : 6px 14px;
+  background    : transparent;
+  color         : var(--textlines);
+  border        : 1px solid var(--textlines-line);
+  border-radius : var(--radius);
+  cursor        : pointer;
+}
+.btn:hover:not(:disabled) { background: var(--textlines-faint); border-color: var(--textlines); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Main button: solid red */
+.btn-primary {
+  width      : 100%;
+  background : var(--accent);
+  color      : var(--bgColor);
+  border-color: var(--accent);
+}
+.btn-primary:hover:not(:disabled) { background: var(--textlines); color: var(--bgColor); border-color: var(--textlines); }
+
+.action-buttons {
+  display    : flex;
+  flex-wrap  : wrap;
+  gap        : 8px;
+  margin-top : 10px;
+}
+
+/* ---------- Summary counters ------------------------------ */
+.pipeline {
+  display               : grid;
+  grid-template-columns : repeat(4, 1fr);
+  border                : 1px solid var(--textlines-line);
+  border-radius         : var(--radius);
+}
+.stage {
+  display         : flex;
+  align-items     : center;
+  justify-content : space-between;
+  gap             : 8px;
+  padding         : 7px 14px;
+}
+.stage + .stage { border-left: 1px solid var(--textlines-line); }
+.stage-label    { color: var(--textlines-dim); }
+.stage-count    { font-size: 1.5rem; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+
+/* ---------- Pending queue --------------------------------- */
+.queue-labels {
+  display         : flex;
+  justify-content : space-between;
+  font-size       : .82rem;
+  color           : var(--textlines-dim);
+}
+.queue-list {
+  display        : flex;
+  flex-wrap      : wrap;
+  gap            : 16px 8px;            /* row gap leaves room for the FRONT/REAR tags */
+  padding-top    : 14px;
+  max-height     : 132px;               /* long queues scroll inside the box */
+  overflow-y     : auto;
+  align-items    : flex-start;
+  align-content  : flex-start;
+}
+.queue-arrow { align-self: center; color: var(--textlines-dim); flex-shrink: 0; }
+
+/* ---------- Order cards ----------------------------------- */
+/* Default card = a pending order: plain cream outline */
+.order-card {
+  position      : relative;
+  min-width     : 150px;
+  padding       : 5px 10px;
+  font-size     : .88rem;
+  border        : 1px solid var(--textlines-line);
+  border-radius : var(--radius);
+}
+.card-line  { display: flex; justify-content: space-between; gap: 12px; }
+.order-id   { font-weight: 700; }
+.order-item { font-weight: 600; }
+.order-price{ font-variant-numeric: tabular-nums; }
+.card-sub   { font-size: .8rem; color: var(--textlines-dim); }
+
+/* One look per stage, using only cream and red:
+     cooking   = red outline
+     ready     = solid red
+     completed = faded                                        */
+.order-card.state-cooking { border-color: var(--accent); }
+.order-card.state-ready   { background: var(--accent); border-color: var(--accent); color: var(--bgColor); }
+.order-card.state-ready .card-sub { color: var(--bgColor); }
+.order-card.state-done    { color: var(--textlines-dim); }
+
+/* FRONT and REAR tags on the pending queue */
+.order-card.is-front { border-color: var(--accent); }
+.order-card.is-front::before,
+.order-card.is-rear::before {
+  position      : absolute;
+  top           : -9px;
+  left          : 8px;
+  padding       : 0 6px;
+  font-size     : .68rem;
+  font-weight   : 700;
+  line-height   : 1.5;
+  border-radius : 2px;
+}
+.order-card.is-front::before { content: "FRONT"; background: var(--accent);   color: var(--bgColor); }
+.order-card.is-rear::before  { content: "REAR";  background: var(--textlines); color: var(--bgColor); }
+
+/* Only one order in the queue: it is both FRONT and REAR */
+.order-card.is-front.is-rear::before { content: "FRONT & REAR"; background: var(--accent); color: var(--bgColor); }
+
+/* ---------- Cooking / ready / completed lists ------------- */
+.cooking-slot .order-card { width: 100%; }
+.cooking-slot { min-height: 40px; }
+.order-list {
+  display        : flex;
+  flex-direction : column;
+  gap            : 6px;
+  min-height     : 40px;
+  max-height     : 140px;
+  overflow-y     : auto;
+}
+
+/* ---------- Small labels ---------------------------------- */
+.badge-fifo {
+  font-size     : .72rem;
+  font-weight   : 600;
+  padding       : 0 7px;
+  color         : var(--textlines-dim);
+  border        : 1px solid var(--textlines-line);
+  border-radius : var(--radius);
+}
+.status-badge {
+  font-size     : .78rem;
+  font-weight   : 600;
+  padding       : 0 8px;
+  white-space   : nowrap;
+  border        : 1px solid var(--textlines-line);
+  border-radius : var(--radius);
+}
+.badge-pending { color: var(--textlines); }
+.badge-cooking { color: var(--textlines); border-color: var(--accent); }
+.badge-ready   { color: var(--bgColor); background: var(--accent); border-color: var(--accent); }
+.badge-done    { color: var(--textlines-dim); }
+
+/* ---------- Customer-wise orders -------------------------- */
+.customer-list {
+  display        : flex;
+  flex-direction : column;
+  gap            : 6px;
+  max-height     : 140px;
+  overflow-y     : auto;
+}
+.customer-group {
+  padding       : 5px 10px;
+  font-size     : .88rem;
+  border        : 1px solid var(--textlines-line);
+  border-radius : var(--radius);
+}
+.customer-head {
+  display         : flex;
+  justify-content : space-between;
+  align-items     : baseline;
+  gap             : 8px;
+  margin-bottom   : 2px;
+}
+.customer-name  { font-weight: 700; }
+.customer-count { margin-left: 4px; font-size: .8rem; color: var(--textlines-dim); }
+.customer-total { font-weight: 600; font-variant-numeric: tabular-nums; }
+.customer-order {
+  display         : flex;
+  justify-content : space-between;
+  align-items     : center;
+  gap             : 8px;
+  padding         : 2px 0;
+}
+
+/* ---------- Activity log ---------------------------------- */
+.activity-log {
+  list-style : none;
+  max-height : 140px;
+  overflow-y : auto;
+  font-size  : .86rem;
+}
+.activity-log li {
+  padding       : 4px 2px;
+  border-bottom : 1px solid var(--textlines-faint);
+}
+.activity-log .log-error { color: var(--accent); font-weight: 600; }
+
+/* ---------- Empty text ------------------------------------ */
+.empty-msg {
+  padding    : 6px 0;
+  font-size  : .88rem;
+  color      : var(--textlines-dim);
+  text-align : center;
+  width      : 100%;
+}
+
+/* ---------- Smaller screens ------------------------------- */
+@media (max-width: 1000px) {
+  .layout     { grid-template-columns: 1fr; }
+  .row-queue  { grid-template-columns: 1fr 1fr; }
+  .row-queue .card-pending { grid-column: 1 / -1; }
+  .row-bottom { grid-template-columns: 1fr 1fr; }
+  .row-bottom .card-log    { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) {
+  .row-queue, .row-bottom { grid-template-columns: 1fr; }
+  .pipeline               { grid-template-columns: 1fr 1fr; }
+  .stage:nth-child(3)     { border-left: none; }
+  .stage:nth-child(n+3)   { border-top: 1px solid var(--textlines-line); }
+}
