@@ -1,4 +1,3 @@
-// ==========================================================
 //  app.js  —  Cafeteria Order Management System
 //  Data Structures Assignment  |  Pure HTML + CSS + JS
 //
@@ -11,14 +10,11 @@
 //
 //  Order lifecycle:
 //    Place Order → pendingOrders (queue) → cookingOrder → readyOrders → completedOrders
-// ==========================================================
 
-
-// ----------------------------------------------------------
 // SECTION 1: FIXED MENU
 // A plain array of objects. Each object has an item name
 // and a price per unit (in rupees).
-// ----------------------------------------------------------
+ 
 var MENU = [
   { item: "Samosa", price: 15 },
   { item: "Sandwich", price: 40 },
@@ -28,8 +24,6 @@ var MENU = [
   { item: "Burger", price: 35 }
 ];
 
-
-// ----------------------------------------------------------
 // SECTION 2: QUEUE DATA (the core data structure)
 //
 // pendingOrders  - array used as a FIFO queue
@@ -48,7 +42,7 @@ var MENU = [
 //
 // nextOrderId    - a simple counter so each order gets a
 //                  unique ID: 1, 2, 3, ...
-// ----------------------------------------------------------
+ 
 var pendingOrders = [];   // FIFO queue - the main data structure
 var cookingOrder = null; // single order being cooked right now
 var readyOrders = [];   // orders ready for pickup
@@ -65,11 +59,9 @@ var STATUS_TEXT = {
   done: "Completed"
 };
 
-
-// ----------------------------------------------------------
 // SECTION 3: DOM REFERENCES
 // Get every HTML element we will update from JavaScript.
-// ----------------------------------------------------------
+ 
 var menuBody = document.getElementById("menu-body");
 var nameInput = document.getElementById("customer-name");
 var pendingList = document.getElementById("pending-list");
@@ -91,13 +83,11 @@ var btnReady = document.getElementById("btn-ready");
 var btnComplete = document.getElementById("btn-complete");
 var btnReset = document.getElementById("btn-reset");
 
-
-// ----------------------------------------------------------
 // SECTION 4: BUILD THE MENU TABLE
 // Loop through MENU and create one table row per item.
 // Each row has a number input so the customer picks a qty.
 // Every quantity starts at 0 (nothing selected).
-// ----------------------------------------------------------
+ 
 function buildMenuTable() {
   menuBody.innerHTML = ""; // clear anything already there
 
@@ -111,8 +101,6 @@ function buildMenuTable() {
   }
 }
 
-
-// ----------------------------------------------------------
 // SECTION 5: PLACE ORDER
 // When the customer clicks "Place Order":
 //   1. Read the customer name (it is required).
@@ -120,7 +108,7 @@ function buildMenuTable() {
 //   3. Build a new order object for each one.
 //   4. push() it onto the pendingOrders array (rear of queue).
 //   5. Refresh the whole display.
-// ----------------------------------------------------------
+ 
 btnPlace.addEventListener("click", function () {
   var customerName = nameInput.value.trim();
   if (customerName === "") {
@@ -169,8 +157,6 @@ btnPlace.addEventListener("click", function () {
   refreshDisplay();
 });
 
-
-// ----------------------------------------------------------
 // SECTION 6: START COOKING
 // When staff clicks "Start Cooking Next":
 //   1. Check that nothing is already cooking.
@@ -178,7 +164,7 @@ btnPlace.addEventListener("click", function () {
 //   3. shift() - remove the FRONT order from the queue.
 //   4. Store it in cookingOrder.
 //   5. Refresh the display.
-// ----------------------------------------------------------
+ 
 btnCook.addEventListener("click", function () {
   // Guard: do not start if already cooking
   if (cookingOrder !== null) {
@@ -200,15 +186,13 @@ btnCook.addEventListener("click", function () {
   refreshDisplay();
 });
 
-
-// ----------------------------------------------------------
 // SECTION 7: MARK READY
 // When staff clicks "Mark Ready":
 //   1. Check that something is actually cooking.
 //   2. Move cookingOrder into the readyOrders array.
 //   3. Clear cookingOrder back to null.
 //   4. Refresh the display.
-// ----------------------------------------------------------
+ 
 btnReady.addEventListener("click", function () {
   if (cookingOrder === null) {
     addLog("ERROR: Nothing is currently being cooked.", "error");
@@ -224,15 +208,13 @@ btnReady.addEventListener("click", function () {
   refreshDisplay();
 });
 
-
-// ----------------------------------------------------------
 // SECTION 8: MARK COMPLETED
 // When staff clicks "Mark Completed":
 //   1. Check that at least one order is ready.
 //   2. shift() - take the oldest ready order (FIFO).
 //   3. Move it to completedOrders.
 //   4. Refresh the display.
-// ----------------------------------------------------------
+ 
 btnComplete.addEventListener("click", function () {
   if (readyOrders.length === 0) {
     addLog("ERROR: No orders are ready for pickup.", "error");
@@ -249,12 +231,10 @@ btnComplete.addEventListener("click", function () {
   refreshDisplay();
 });
 
-
-// ----------------------------------------------------------
 // SECTION 9: RESET
 // Clear all data, the activity log and the order form, so the
 // page looks exactly like a fresh start.
-// ----------------------------------------------------------
+ 
 btnReset.addEventListener("click", function () {
   var confirmed = confirm("Reset ALL orders? This cannot be undone.");
   if (!confirmed) {
@@ -280,12 +260,10 @@ btnReset.addEventListener("click", function () {
   addLog("System ready. Place an order to begin.", "info");
   refreshDisplay();
 });
-
-
-// ----------------------------------------------------------
+ 
 // SECTION 10: REFRESH DISPLAY
 // Called after every action to redraw all sections.
-// ----------------------------------------------------------
+ 
 function refreshDisplay() {
   showPendingQueue();
   showCooking();
@@ -294,16 +272,14 @@ function refreshDisplay() {
   showCustomers();
   updateCounts();
 }
-
-
-// ----------------------------------------------------------
+ 
 // SECTION 11: HELPERS
 // safeText()     - turns text into safe HTML, so a customer name
 //                  like "<b>" cannot break the page.
 // makeCardHtml() - the text inside one order card:
 //                  line 1: #ID  Item ............ Price
 //                  line 2: Customer ............ Qty
-// ----------------------------------------------------------
+ 
 function safeText(text) {
   var box = document.createElement("div");
   box.textContent = text;
@@ -322,12 +298,10 @@ function makeCardHtml(order) {
     "</div>";
 }
 
-
-// ----------------------------------------------------------
 // SECTION 12: SHOW PENDING QUEUE
 // Draw one card per order. The first card (index 0) is the
 // FRONT (next to cook). The last card is the REAR (newest).
-// ----------------------------------------------------------
+ 
 function showPendingQueue() {
   pendingList.innerHTML = "";
 
@@ -359,11 +333,9 @@ function showPendingQueue() {
     pendingList.appendChild(card);
   }
 }
-
-
-// ----------------------------------------------------------
+ 
 // SECTION 13: SHOW COOKING
-// ----------------------------------------------------------
+ 
 function showCooking() {
   cookingSlot.innerHTML = "";
 
@@ -379,10 +351,8 @@ function showCooking() {
   cookingSlot.appendChild(card);
 }
 
-
-// ----------------------------------------------------------
 // SECTION 14: SHOW READY FOR PICKUP
-// ----------------------------------------------------------
+ 
 function showReady() {
   readyList.innerHTML = "";
 
@@ -399,12 +369,10 @@ function showReady() {
   }
 }
 
-
-// ----------------------------------------------------------
 // SECTION 15: SHOW COMPLETED ORDERS
 // Newest first (reverse loop) so the latest completed order
 // appears at the top.
-// ----------------------------------------------------------
+ 
 function showCompleted() {
   completedList.innerHTML = "";
 
@@ -421,15 +389,13 @@ function showCompleted() {
     completedList.appendChild(card);
   }
 }
-
-
-// ----------------------------------------------------------
+ 
 // SECTION 16: SHOW CUSTOMER-WISE ORDERS
 // Goes through allOrders and groups the orders by customer
 // name (not case-sensitive: "asha" and "Asha" are the same
 // customer). For each customer it shows every order with its
 // current status, plus the total bill.
-// ----------------------------------------------------------
+ 
 function showCustomers() {
   customersList.innerHTML = "";
 
@@ -484,10 +450,8 @@ function showCustomers() {
   }
 }
 
-
-// ----------------------------------------------------------
 // SECTION 17: UPDATE SUMMARY COUNTS + BUTTON STATES
-// ----------------------------------------------------------
+ 
 function updateCounts() {
   countPending.textContent = pendingOrders.length;
   countCooking.textContent = (cookingOrder !== null) ? 1 : 0;
@@ -500,11 +464,9 @@ function updateCounts() {
   btnComplete.disabled = (readyOrders.length === 0);
 }
 
-
-// ----------------------------------------------------------
 // SECTION 18: ACTIVITY LOG
 // Add a new message line at the TOP of the log.
-// ----------------------------------------------------------
+ 
 function addLog(message, type) {
   // Map action type to a CSS class for colour coding
   var cssClass = "log-info";
@@ -528,11 +490,9 @@ function addLog(message, type) {
   }
 }
 
-
-// ----------------------------------------------------------
 // SECTION 19: INITIALISE
 // Run once when the page loads.
-// ----------------------------------------------------------
+ 
 function init() {
   buildMenuTable();
   refreshDisplay();
